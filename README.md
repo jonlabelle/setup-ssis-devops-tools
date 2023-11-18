@@ -1,6 +1,6 @@
 # Setup SSIS DevOps Tools
 
-Installs the standalone SQL Server Integration Service (SSIS) [devops tools](https://learn.microsoft.com/en-us/sql/integration-services/devops/ssis-devops-standalone).
+Installs the latest standalone SQL Server Integration Service (SSIS) [devops tools](https://learn.microsoft.com/en-us/sql/integration-services/devops/ssis-devops-standalone).
 
 ## Usage
 
