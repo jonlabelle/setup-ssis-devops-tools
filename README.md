@@ -5,7 +5,7 @@ A GitHub action that installs the latest standalone SQL Server Integration Servi
 ## Usage
 
 > [!IMPORTANT]
-> The step only supports Windows runners.
+> The step only supports **Windows** runners.
 
 ```yaml
 - name: Setup SSIS devops tools
