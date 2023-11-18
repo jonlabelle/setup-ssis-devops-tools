@@ -14,6 +14,4 @@ Installs the standalone SQL Server Integration Service (SSIS) [devops tools](htt
 
 After running this step, [SSISBuild.exe](https://learn.microsoft.com/en-us/sql/integration-services/devops/ssis-devops-standalone#ssisbuildexe) and [SSISDeploy.exe](https://learn.microsoft.com/en-us/sql/integration-services/devops/ssis-devops-standalone#ssisdeployexe) are available for use in your path.
 
-## Related
-
-- [Test Setup SSIS DevOps Tools](https://github.com/jonlabelle/setup-ssis-devops-tools-test) - The testing repo for this project.
+See the [tests](https://github.com/jonlabelle/setup-ssis-devops-tools/blob/main/.github/workflows/test.yml) for example usage.
