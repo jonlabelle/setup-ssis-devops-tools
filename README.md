@@ -9,7 +9,7 @@ Installs the latest standalone SQL Server Integration Service (SSIS) [devops too
 
 ```yaml
 - name: Setup SSIS devops tools
-  uses: jonlabelle/setup-ssis-devops-tools@v1
+  uses: jonlabelle/setup-ssis-devops-tools@main
 ```
 
 After running this step, [SSISBuild.exe](https://learn.microsoft.com/en-us/sql/integration-services/devops/ssis-devops-standalone#ssisbuildexe) and [SSISDeploy.exe](https://learn.microsoft.com/en-us/sql/integration-services/devops/ssis-devops-standalone#ssisdeployexe) are available for use in your path.
