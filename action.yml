@@ -1,6 +1,9 @@
 name: 'Setup SQL Server SSIS devops tools'
 description: 'Setup standalone SQL Server Integration Service (SSIS) devops tools'
 author: 'Jon LaBelle'
+branding:
+  icon: 'database'
+  color: 'yellow'
 runs:
   using: 'composite'
   steps:
