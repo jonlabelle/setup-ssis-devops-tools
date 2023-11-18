@@ -1,0 +1,21 @@
+name: 'Setup SQL Server SSIS devops tools'
+description: 'Setup standalone SQL Server Integration Service (SSIS) devops tools'
+author: 'Jon LaBelle'
+runs:
+  using: 'composite'
+  steps:
+    - name: Ensure Windows OS
+      if: ${{ runner.os != 'Windows' }}
+      shell: pwsh
+      run: |
+        echo "::error title=⛔ error hint::Support for Windows only"
+        exit 1
+    - name: Add action path to system path
+      run: echo "${{ github.action_path }}" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8NoBOM -Append
+      shell: pwsh
+    - name: Download SSISDevOpsTools.exe
+      run: Invoke-WebRequest -Uri https://aka.ms/SSISDevOpsTools -OutFile SSISDevOpsTools.exe
+      shell: pwsh
+    - name: Extract SSISDevOpsTools.exe
+      run: .\SSISDevOpsTools.exe /Q /C '/T:${{ github.action_path }}'
+      shell: pwsh
