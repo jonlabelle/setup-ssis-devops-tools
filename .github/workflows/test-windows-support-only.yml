@@ -12,7 +12,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
       - name: Setup SSIS tools
-        uses: jonlabelle/setup-ssis-devops-tools@main
+        uses: ./
       - name: Show SSISBuild.exe help
         run: SSISBuild.exe -h
         shell: pwsh
