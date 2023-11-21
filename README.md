@@ -2,7 +2,15 @@
 
 [![test](https://github.com/jonlabelle/setup-ssis-devops-tools/actions/workflows/test.yml/badge.svg)](https://github.com/jonlabelle/setup-ssis-devops-tools/actions/workflows/test.yml)
 
-A GitHub action that installs the latest standalone SQL Server Integration Service (SSIS) [devops tools](https://learn.microsoft.com/en-us/sql/integration-services/devops/ssis-devops-standalone).
+> A GitHub action that installs the latest standalone SQL Server Integration Service (SSIS) [devops tools](https://learn.microsoft.com/en-us/sql/integration-services/devops/ssis-devops-standalone).
+
+Standalone SSIS DevOps Tools provide a set of executables to do SSIS CICD tasks.
+Without the dependency on the installation of Visual Studio or SSIS runtime,
+these executables can be easily integrated with your CICD workflow.
+The executables provided are:
+
+- [SSISBuild.exe](https://learn.microsoft.com/en-us/sql/integration-services/devops/ssis-devops-standalone#ssisbuildexe): build SSIS projects in project deployment model or package deployment model.
+- [SSISDeploy.exe](https://learn.microsoft.com/en-us/sql/integration-services/devops/ssis-devops-standalone#ssisdeployexe): deploy ISPAC files to SSIS catalog, or DTSX files and their dependencies to file system.
 
 ## Usage
 
@@ -14,7 +22,7 @@ A GitHub action that installs the latest standalone SQL Server Integration Servi
   uses: jonlabelle/setup-ssis-devops-tools@main
 ```
 
-After running this step, [SSISBuild.exe](https://learn.microsoft.com/en-us/sql/integration-services/devops/ssis-devops-standalone#ssisbuildexe) and [SSISDeploy.exe](https://learn.microsoft.com/en-us/sql/integration-services/devops/ssis-devops-standalone#ssisdeployexe) are available for use in your path.
+After running this step, **SSISBuild.exe** and **SSISDeploy.exe** are available for use from your path.
 
 See the [tests](https://github.com/jonlabelle/setup-ssis-devops-tools/blob/main/.github/workflows/test.yml) for example usage.
 
