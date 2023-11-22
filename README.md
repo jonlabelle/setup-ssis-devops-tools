@@ -3,7 +3,7 @@
 [![test](https://github.com/jonlabelle/setup-ssis-devops-tools/actions/workflows/test.yml/badge.svg)](https://github.com/jonlabelle/setup-ssis-devops-tools/actions/workflows/test.yml)
 
 > A GitHub action that installs the latest standalone SQL Server Integration
-> Service (SSIS) [devops > tools](https://learn.microsoft.com/en-us/sql/integration-services/devops/ssis-devops-standalone).
+> Service (SSIS) [devops tools](https://learn.microsoft.com/en-us/sql/integration-services/devops/ssis-devops-standalone).
 
 Standalone SSIS DevOps Tools provide a set of executables to do SSIS CICD tasks
 without the dependency on the installation of Visual Studio or SSIS runtime. The
