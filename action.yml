@@ -13,12 +13,23 @@ runs:
       run: |
         echo "::error title=⛔ error hint::Support for Windows only"
         exit 1
-    - name: Add action path to system path
+
+    - name: Output SSIS tools path
       shell: pwsh
-      run: echo "${{ github.action_path }}" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8NoBOM -Append
+      id: ssis-tools
+      run: |
+        $toolsPath = Join-Path -Path '${{ github.action_path }}' -ChildPath 'ssis-tools'
+        Write-Output "path=$toolsPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8NoBOM -Append
+
     - name: Download SSISDevOpsTools.exe
       shell: pwsh
       run: Invoke-WebRequest -Uri https://aka.ms/SSISDevOpsTools -OutFile SSISDevOpsTools.exe
+
     - name: Extract SSISDevOpsTools.exe
       shell: pwsh
-      run: .\SSISDevOpsTools.exe /Q /C '/T:${{ github.action_path }}'
+      run: |
+        .\SSISDevOpsTools.exe /Q /C "/T:${{ steps.ssis-tools.outputs.path }}"
+
+    - name: Add SSIS tools path to system path
+      shell: pwsh
+      run: Write-Output "${{ steps.ssis-tools.outputs.path }}" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8NoBOM -Append
