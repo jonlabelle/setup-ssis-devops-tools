@@ -19,7 +19,7 @@ runs:
       id: ssis-tools
       run: |
         $toolsPath = Join-Path -Path '${{ github.action_path }}' -ChildPath 'ssis-tools'
-        Write-Output "path=$toolsPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8NoBOM -Append
+        Write-Output "ssis_tools_path=$toolsPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8NoBOM -Append
 
     - name: Download SSISDevOpsTools.exe
       shell: pwsh
@@ -28,8 +28,8 @@ runs:
     - name: Extract SSISDevOpsTools.exe
       shell: pwsh
       run: |
-        .\SSISDevOpsTools.exe /Q /C "/T:${{ steps.ssis-tools.outputs.path }}"
+        .\SSISDevOpsTools.exe /Q /C "/T:${{ steps.ssis-tools.outputs.ssis_tools_path }}"
 
     - name: Add SSIS tools path to system path
       shell: pwsh
-      run: Write-Output "${{ steps.ssis-tools.outputs.path }}" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8NoBOM -Append
+      run: Write-Output "${{ steps.ssis-tools.outputs.ssis_tools_path }}" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8NoBOM -Append
