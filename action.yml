@@ -27,8 +27,7 @@ runs:
 
     - name: Extract SSISDevOpsTools.exe
       shell: pwsh
-      run: |
-        .\SSISDevOpsTools.exe /Q /C "/T:${{ steps.ssis-tools.outputs.ssis_tools_path }}"
+      run: .\SSISDevOpsTools.exe /Q /C "/T:${{ steps.ssis-tools.outputs.ssis_tools_path }}"
 
     - name: Add SSIS tools path to system path
       shell: pwsh
