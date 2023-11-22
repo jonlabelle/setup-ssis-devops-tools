@@ -20,6 +20,14 @@ runs:
       run: |
         $toolsPath = Join-Path -Path '${{ github.action_path }}' -ChildPath 'ssis-tools'
         Write-Output "ssis_tools_path=$toolsPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8NoBOM -Append
+        $summary=@"
+          ### Step Output Variables
+
+          | Variable        | Value      |
+          |-----------------|------------|
+          | ssis_tools_path | $toolsPath |
+        "@
+        Write-Output $summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8NoBOM -Append
 
     - name: Download SSISDevOpsTools.exe
       shell: pwsh
