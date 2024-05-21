@@ -8,7 +8,7 @@ branding:
 runs:
   using: composite
   steps:
-    - name: Ensure Windows OS
+    - name: Ensure Windows runner
       if: ${{ runner.os != 'Windows' }}
       shell: sh
       run: |
