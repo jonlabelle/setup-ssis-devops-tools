@@ -14,8 +14,8 @@ executables provided are:
 
 ## Usage
 
-> [!IMPORTANT]
-> This step supports **Windows** runners only.
+> [!IMPORTANT]  
+> This action supports **Windows** runners only.
 
 ```yaml
 - name: Setup SSIS devops tools

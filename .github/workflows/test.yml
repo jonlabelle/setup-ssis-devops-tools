@@ -12,12 +12,13 @@ jobs:
     name: Test setting up SSIS tools
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@main
+
       - name: Setup SSIS tools
         uses: ./
+
       - name: Show SSISBuild.exe help
         run: SSISBuild.exe -h
-        shell: pwsh
+        
       - name: Show SSISDeploy.exe help
         run: SSISDeploy.exe -h
-        shell: pwsh

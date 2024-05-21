@@ -1,17 +1,18 @@
-name: 'Setup SQL Server SSIS devops tools'
-description: 'Setup standalone SQL Server Integration Service (SSIS) devops tools'
-author: 'Jon LaBelle'
+name: Setup SQL Server SSIS devops tools
+description: Setup standalone SQL Server Integration Service (SSIS) devops tools
+author: Jon LaBelle
 branding:
-  icon: 'database'
-  color: 'yellow'
+  icon: database
+  color: yellow
+
 runs:
-  using: 'composite'
+  using: composite
   steps:
     - name: Ensure Windows OS
       if: ${{ runner.os != 'Windows' }}
       shell: pwsh
       run: |
-        echo "::error title=⛔ error hint::Support for Windows only"
+        echo "::error title=✘ Unsupported runner::Please choose a Windows runner to execute this action, e.g. windows-latest"
         exit 1
 
     - name: Output SSIS tools path
