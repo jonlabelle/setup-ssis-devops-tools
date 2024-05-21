@@ -10,7 +10,7 @@ runs:
   steps:
     - name: Ensure Windows OS
       if: ${{ runner.os != 'Windows' }}
-      shell: pwsh
+      shell: sh
       run: |
         echo "::error title=✘ Unsupported runner::Please choose a Windows runner to execute this action, e.g. windows-latest"
         exit 1
