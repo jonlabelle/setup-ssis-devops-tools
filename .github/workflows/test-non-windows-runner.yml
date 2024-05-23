@@ -1,0 +1,35 @@
+name: test non-windows runner
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test setup fails on non-Windows runner
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@main
+
+      - name: Setup SSIS tools
+        id: setup-ssis-tools
+        continue-on-error: true
+        uses: ./
+
+      - name: Assert test passed
+        if: ${{ steps.setup-ssis-tools.outcome == 'failure' && !cancelled() }}
+        run: echo '✓ Test passed, setup was expected to fail on non-Windows runner'
+
+      - name: Assert test failed
+        if: ${{ steps.setup-ssis-tools.outcome == 'success' && !cancelled() }}
+        run: |
+          echo "::error title=✘ Test failed::Setup was expected to fail on non-Windows runners, but it did not."
+          exit 1
