@@ -1,0 +1,28 @@
+name: lint
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint yaml files
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@main
+
+      - name: Install yamllint
+        run: pip install --user yamllint
+
+      - name: Run yamllint
+        run: yamllint --config-file .yamllint.yml .
