@@ -112,8 +112,8 @@ scratch.*
 .vs
 
 # .vscode dir except settings
-.vscode
-!.vscode/extensions.json
-!.vscode/launch.json
-!.vscode/settings.json
-!.vscode/tasks.json
+# .vscode
+# !.vscode/extensions.json
+# !.vscode/launch.json
+# !.vscode/settings.json
+# !.vscode/tasks.json

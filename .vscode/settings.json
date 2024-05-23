@@ -1,0 +1,30 @@
+{
+  "editor.insertSpaces": true,
+  "editor.rulers": [80, 120],
+
+  // esbenp.prettier-vscode
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "none",
+  "prettier.resolveGlobalModules": true,
+  "prettier.useEditorConfig": true,
+
+  // redhat.vscode-yaml
+  "yaml.format.singleQuote": true,
+  "yaml.validate": true,
+  "yaml.schemaStore.enable": true,
+
+  // ms-vscode.powershell
+  "powershell.codeFormatting.preset": "Allman",
+  "powershell.codeFormatting.alignPropertyValuePairs": false,
+  "powershell.codeFormatting.autoCorrectAliases": true,
+  "powershell.codeFormatting.ignoreOneLineBlock": true,
+  "powershell.codeFormatting.trimWhitespaceAroundPipe": true,
+  "powershell.codeFormatting.useConstantStrings": true,
+  "powershell.codeFormatting.useCorrectCasing": true,
+  "powershell.codeFormatting.whitespaceAroundOperator": true,
+  "powershell.codeFormatting.whitespaceBetweenParameters": true,
+  "powershell.codeFormatting.whitespaceInsideBrace": false,
+
+  // streetsidesoftware.code-spell-checker
+  "cSpell.words": ["jonlabelle", "SSIS"]
+}
