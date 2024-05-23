@@ -1,12 +1,14 @@
 name: test
 
 on:
-  pull_request:
-    branches:
-      - "main"
   push:
     branches:
-      - "main"
+      - main
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
   workflow_dispatch:
 
 jobs:
@@ -14,7 +16,7 @@ jobs:
     runs-on: windows-latest
     name: Test setting up SSIS tools
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@main
 
       - name: Setup SSIS tools

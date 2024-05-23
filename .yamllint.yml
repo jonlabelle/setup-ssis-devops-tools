@@ -1,0 +1,20 @@
+extends: default
+
+# yamllint rules config
+# https://yamllint.readthedocs.io/en/stable/configuration.html
+rules:
+  # line-length
+  # https://yamllint.readthedocs.io/en/latest/rules.html#module-yamllint.rules.line_length
+  line-length:
+    max: 180
+    level: warning
+
+  # document-start
+  # https://yamllint.readthedocs.io/en/latest/rules.html#module-yamllint.rules.document_start
+  document-start:
+    present: false
+
+  # comments
+  # https://yamllint.readthedocs.io/en/latest/rules.html#module-yamllint.rules.comments
+  comments:
+    require-starting-space: false
