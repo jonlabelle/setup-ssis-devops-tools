@@ -4,11 +4,17 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '**.yml'
+      - '**.yaml'
   pull_request:
     types:
       - opened
       - edited
       - synchronize
+    paths:
+      - '**.yml'
+      - '**.yaml'
     branches:
       - main
   workflow_dispatch:

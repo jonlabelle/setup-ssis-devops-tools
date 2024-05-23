@@ -1,0 +1,32 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+
+  "configurations": [
+    {
+      "name": "pwsh: Run PSScriptAnalyzer",
+      "type": "PowerShell",
+      "request": "launch",
+      "script": "Invoke-ScriptAnalyzer -Settings PSScriptAnalyzerSettings.psd1 -Recurse -Path .",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "pwsh: Run current file",
+      "type": "PowerShell",
+      "request": "launch",
+      "script": "${file}",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      // Run this launch config and then set breakpoints in your module.
+      // Then you can `Import-Module -Force ./DailyBackup.psd1`
+      // and run a function that will hit the breakpoint.
+      "name": "pwsh: Interactive session",
+      "type": "PowerShell",
+      "request": "launch",
+      "cwd": ""
+    }
+  ]
+}

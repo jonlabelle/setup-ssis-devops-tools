@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '**.md'
+      - '**.yml'
+      - '**.yaml'
+      - '**.js'
+      - '**.json'
   pull_request:
     types:
       - opened
@@ -11,6 +17,12 @@ on:
       - synchronize
     branches:
       - main
+    paths:
+      - '**.md'
+      - '**.yml'
+      - '**.yaml'
+      - '**.js'
+      - '**.json'
   workflow_dispatch:
 
 jobs:
@@ -22,4 +34,4 @@ jobs:
         uses: actions/checkout@main
 
       - name: Run Prettier format check
-        run: npx prettier --check --log-level log '**.{md,yml,js,json}'
+        run: npx prettier --check --log-level log '**.{md,yaml,yml,js,json}'

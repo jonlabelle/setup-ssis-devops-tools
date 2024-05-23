@@ -15,6 +15,7 @@
 
   // ms-vscode.powershell
   "powershell.codeFormatting.preset": "Allman",
+  "powershell.codeFormatting.addWhitespaceAroundPipe": true,
   "powershell.codeFormatting.alignPropertyValuePairs": false,
   "powershell.codeFormatting.autoCorrectAliases": true,
   "powershell.codeFormatting.ignoreOneLineBlock": true,
@@ -24,6 +25,8 @@
   "powershell.codeFormatting.whitespaceAroundOperator": true,
   "powershell.codeFormatting.whitespaceBetweenParameters": true,
   "powershell.codeFormatting.whitespaceInsideBrace": false,
+  "powershell.scriptAnalysis.enable": true,
+  "powershell.scriptAnalysis.settingsPath": "PSScriptAnalyzerSettings.psd1",
 
   // streetsidesoftware.code-spell-checker
   "cSpell.words": ["commitlint", "jonlabelle", "SSIS"]
