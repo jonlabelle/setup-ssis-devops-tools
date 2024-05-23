@@ -24,7 +24,7 @@
   "powershell.codeFormatting.useCorrectCasing": true,
   "powershell.codeFormatting.whitespaceAroundOperator": true,
   "powershell.codeFormatting.whitespaceBetweenParameters": true,
-  "powershell.codeFormatting.whitespaceInsideBrace": false,
+  "powershell.codeFormatting.whitespaceInsideBrace": true,
   "powershell.scriptAnalysis.enable": true,
   "powershell.scriptAnalysis.settingsPath": "PSScriptAnalyzerSettings.psd1",
 
