@@ -8,6 +8,7 @@ on:
       - '**.ps1'
       - '**.psd1'
       - '**.psm1'
+      - '.github/workflows/analyze.yml'
   pull_request:
     types:
       - opened
@@ -17,6 +18,7 @@ on:
       - '**.ps1'
       - '**.psd1'
       - '**.psm1'
+      - '.github/workflows/analyze.yml'
     branches:
       - main
   workflow_dispatch:

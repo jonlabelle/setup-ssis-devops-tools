@@ -10,6 +10,7 @@ on:
       - '**.yaml'
       - '**.js'
       - '**.json'
+      - '.github/workflows/format-check.yml'
   pull_request:
     types:
       - opened
@@ -23,6 +24,7 @@ on:
       - '**.yaml'
       - '**.js'
       - '**.json'
+      - '.github/workflows/format-check.yml'
   workflow_dispatch:
 
 jobs:

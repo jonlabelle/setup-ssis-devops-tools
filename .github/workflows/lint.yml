@@ -7,6 +7,7 @@ on:
     paths:
       - '**.yml'
       - '**.yaml'
+      - '.github/workflows/lint.yml'
   pull_request:
     types:
       - opened
@@ -15,6 +16,7 @@ on:
     paths:
       - '**.yml'
       - '**.yaml'
+      - '.github/workflows/lint.yml'
     branches:
       - main
   workflow_dispatch:
