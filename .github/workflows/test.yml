@@ -9,12 +9,14 @@ on:
       - opened
       - edited
       - synchronize
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
   test:
     runs-on: windows-latest
-    name: Test setting up SSIS tools
+    name: Test SSIS tools setup
     steps:
       - name: Checkout repository
         uses: actions/checkout@main
