@@ -20,7 +20,7 @@ executables provided are:
 
 ```yaml
 - name: Setup SSIS devops tools
-  uses: jonlabelle/setup-ssis-devops-tools@v1.4.1
+  uses: jonlabelle/setup-ssis-devops-tools@v1
 ```
 
 After running this step, **SSISBuild.exe** and **SSISDeploy.exe** are available for use from your path.
