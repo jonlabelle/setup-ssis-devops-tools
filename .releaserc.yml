@@ -1,0 +1,8 @@
+branch: main
+repositoryUrl: https://github.com/jonlabelle/setup-ssis-devops-tools
+tagFormat: v${version}
+plugins:
+  - '@semantic-release/commit-analyzer'
+  - '@semantic-release/release-notes-generator'
+  - '@semantic-release/exec'
+  - '@semantic-release/git'

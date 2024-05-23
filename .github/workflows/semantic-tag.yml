@@ -1,0 +1,40 @@
+name: semantic tag
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read # for checkout
+
+jobs:
+  semantic-tag:
+    name: Create tag for release
+    runs-on: ubuntu-latest
+
+    # https://github.com/semantic-release/semantic-release/blob/master/docs/recipes/ci-configurations/github-actions.md
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@main
+
+      - name: Setup Node.js
+        uses: actions/setup-node@main
+        with:
+          node-version: 'lts/*'
+
+      - name: Install npm global packages
+        run: >-
+          npm install -g
+          semantic-release
+          @semantic-release/commit-analyzer
+          @semantic-release/exec
+          @semantic-release/git
+          @semantic-release/release-notes-generator
+
+      - name: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: npx semantic-release
