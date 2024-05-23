@@ -26,5 +26,5 @@
   "powershell.codeFormatting.whitespaceInsideBrace": false,
 
   // streetsidesoftware.code-spell-checker
-  "cSpell.words": ["jonlabelle", "SSIS"]
+  "cSpell.words": ["commitlint", "jonlabelle", "SSIS"]
 }
