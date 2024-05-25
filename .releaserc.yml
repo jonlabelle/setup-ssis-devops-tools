@@ -1,5 +1,7 @@
-branch: main
-repositoryUrl: https://github.com/jonlabelle/setup-ssis-devops-tools
+# semantic-release configuration: https://semantic-release.gitbook.io/semantic-release/usage/configuration
+branches:
+  - main
+repositoryUrl: https://github.com/jonlabelle/setup-ssis-devops-tools.git
 tagFormat: v${version}
 plugins:
   - '@semantic-release/commit-analyzer'
