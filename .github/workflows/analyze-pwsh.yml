@@ -1,4 +1,4 @@
-name: analyze
+name: analyze pwsh
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
       - '**.ps1'
       - '**.psd1'
       - '**.psm1'
-      - '.github/workflows/analyze.yml'
+      - '.github/workflows/analyze-pwsh.yml'
   pull_request:
     types:
       - opened
@@ -18,7 +18,7 @@ on:
       - '**.ps1'
       - '**.psd1'
       - '**.psm1'
-      - '.github/workflows/analyze.yml'
+      - '.github/workflows/analyze-pwsh.yml'
     branches:
       - main
   workflow_dispatch:

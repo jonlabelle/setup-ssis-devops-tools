@@ -1,4 +1,4 @@
-name: lint
+name: lint yaml
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     paths:
       - '**.yml'
       - '**.yaml'
-      - '.github/workflows/lint.yml'
+      - '.github/workflows/lint-yaml.yml'
   pull_request:
     types:
       - opened
@@ -16,15 +16,15 @@ on:
     paths:
       - '**.yml'
       - '**.yaml'
-      - '.github/workflows/lint.yml'
+      - '.github/workflows/lint-yaml.yml'
     branches:
       - main
   workflow_dispatch:
 
 jobs:
   lint:
-    name: Lint yaml files
-    runs-on: [ubuntu-latest]
+    name: Lint yaml
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@main

@@ -1,42 +1,66 @@
 name: update main version
-run-name: Move ${{ github.event.inputs.version }} to ${{ github.event.inputs.target }}
 
-# Re-tags the main version, e.g. @v1, with the specified tag or ref.
-# Original: https://github.com/actions/checkout/blob/main/.github/workflows/update-main-version.yml
+# Re-tags the latest main version, using the latest tag's major version
+# Examples: `v1.2.0 -> v1` or `v2.9.0 -> v2`
+# Triggers: after a release is published, or manually dispatched
+# Similar to: https://github.com/actions/checkout/blob/main/.github/workflows/update-main-version.yml
 
 on:
+  release:
+    types:
+      - published
+
   workflow_dispatch:
     inputs:
       target:
-        description: The tag or reference to use.
+        description: The tag or reference to use. Or the latest full version e.g. `vX.X.X`.
         required: true
       version:
         description: |
           The major version to update. Example: `v1`
-        type: choice
         required: true
         default: 'v1'
-        options:
-          - v1
 
 jobs:
-  tag:
+  update-main-version:
+    name: Update main version
     runs-on: ubuntu-latest
     steps:
-      # Note this update workflow can also be used as a rollback tool.
-      # For that reason, it's best to pin `actions/checkout` to a known, stable version
-      # (typically, about two releases back).
-      - uses: actions/checkout@main
+      - name: Checkout repository
+        uses: actions/checkout@main
         with:
           fetch-depth: 0
+          fetch-tags: true
 
-      - name: Git config
+      - name: Config git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "226837+jonlabelle@users.noreply.github.com"
 
+      - name: Auto-tag latest major version
+        if: ${{ github.event_name != 'workflow_dispatch' }}
+        run: |
+          LATEST_TAG="$(git describe --abbrev=0 --tags)"
+          MAJOR_VER="$(echo "${LATEST_TAG}" | cut -d. -f1)"
+
+          if [[ ${LATEST_TAG} =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            if [[ "${LATEST_TAG}" != "${MAJOR_VER}" ]]; then
+              git tag -f "${MAJOR_VER}" "${LATEST_TAG}"
+              git push origin "${MAJOR_VER}" --force
+              echo "::notice title=✓ Main version tagged::Tagged ${LATEST_TAG} with ${MAJOR_VER}"
+            else
+              echo "::warning title=Already tagged::Target is already tagged with ${MAJOR_VER}. Nothing to do."
+            fi
+          else
+            echo "::warning title=Invalid semver::${LATEST_TAG} is not a valid semver. Nothing to do."
+          fi
+
       - name: Tag new target
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         run: git tag -f ${{ github.event.inputs.version }} ${{ github.event.inputs.target }}
 
       - name: Push new tag
-        run: git push origin ${{ github.event.inputs.version }} --force
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          git push origin ${{ github.event.inputs.version }} --force
+          echo "::notice title=✓ Main version tagged::Tagged ${{ github.event.inputs.target }} with ${{ github.event.inputs.version }}"
