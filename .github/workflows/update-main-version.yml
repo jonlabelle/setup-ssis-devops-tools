@@ -47,7 +47,7 @@ jobs:
             if [[ "${LATEST_TAG}" != "${MAJOR_VER}" ]]; then
               git tag -f "${MAJOR_VER}" "${LATEST_TAG}"
               git push origin "${MAJOR_VER}" --force
-              echo "::notice title=✓ Main version tagged::Tagged ${LATEST_TAG} with ${MAJOR_VER}"
+              echo "::notice title=Main version tagged::Tagged ${LATEST_TAG} with ${MAJOR_VER}"
             else
               echo "::warning title=Already tagged::Target is already tagged with ${MAJOR_VER}. Nothing to do."
             fi
@@ -63,4 +63,4 @@ jobs:
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
           git push origin ${{ github.event.inputs.version }} --force
-          echo "::notice title=✓ Main version tagged::Tagged ${{ github.event.inputs.target }} with ${{ github.event.inputs.version }}"
+          echo "::notice title=Main version tagged::Tagged ${{ github.event.inputs.target }} with ${{ github.event.inputs.version }}"
