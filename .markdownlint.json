@@ -11,14 +11,15 @@
   "fenced-code-language": {
     "allowed_languages": [
       "bash",
+      "console",
       "html",
       "javascript",
       "json",
       "markdown",
+      "powershell",
       "text",
       "xml",
-      "yaml",
-      "powershell"
+      "yaml"
     ],
     "language_only": true
   },
