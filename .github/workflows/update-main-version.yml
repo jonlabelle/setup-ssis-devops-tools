@@ -43,7 +43,7 @@ jobs:
           LATEST_TAG="$(git describe --abbrev=0 --tags)"
           MAJOR_VER="$(echo "${LATEST_TAG}" | cut -d. -f1)"
 
-          if [[ ${LATEST_TAG} =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          if [[ ${LATEST_TAG} =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             if [[ "${LATEST_TAG}" != "${MAJOR_VER}" ]]; then
               git tag -f "${MAJOR_VER}" "${LATEST_TAG}"
               git push origin "${MAJOR_VER}" --force
