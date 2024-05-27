@@ -1,0 +1,28 @@
+name: dependency review
+
+# https://github.com/actions/dependency-review-action
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@main
+
+      - name: Dependency review
+        uses: actions/dependency-review-action@main
+        with:
+          fail-on-severity: moderate
+          comment-summary-in-pr: always
+          allow-licenses: 'MIT'
