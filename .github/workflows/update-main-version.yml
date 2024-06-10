@@ -13,13 +13,17 @@ on:
   workflow_dispatch:
     inputs:
       target:
-        description: The tag or reference to use. Or the latest full version e.g. `vX.X.X`.
+        description: |
+          The tag, ref, or latest full version to use. Example: v1.2.1
         required: true
       version:
         description: |
-          The major version to update. Example: `v1`
+          The major version to update. Example: v1
         required: true
         default: 'v1'
+
+env:
+  TARGET: ${{ github.event.inputs.target || github.event.release.tag_name }}
 
 jobs:
   update-main-version:
@@ -37,30 +41,32 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "226837+jonlabelle@users.noreply.github.com"
 
-      - name: Auto-tag latest major version
+      - name: Auto-tag latest major version with ${{ env.TARGET }}
         if: ${{ github.event_name != 'workflow_dispatch' }}
         run: |
-          LATEST_TAG="$(git describe --abbrev=0 --tags)"
-          MAJOR_VER="$(echo "${LATEST_TAG}" | cut -d. -f1)"
-
-          if [[ ${LATEST_TAG} =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            if [[ "${LATEST_TAG}" != "${MAJOR_VER}" ]]; then
-              git tag -f "${MAJOR_VER}" "${LATEST_TAG}"
+          if [[ ${TARGET} =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            MAJOR_VER="$(echo "${TARGET}" | cut -d. -f1)"
+            if [[ "${TARGET}" != "${MAJOR_VER}" ]]; then
+              git tag -f "${MAJOR_VER}" "${TARGET}"
               git push origin "${MAJOR_VER}" --force
-              echo "::notice title=Main version tagged::Tagged ${LATEST_TAG} with ${MAJOR_VER}"
+              echo "::notice title=Main version tagged::Tagged ${TARGET} with ${MAJOR_VER}"
             else
               echo "::warning title=Already tagged::Target is already tagged with ${MAJOR_VER}. Nothing to do."
             fi
           else
-            echo "::warning title=Invalid semver::${LATEST_TAG} is not a valid semver. Nothing to do."
+            echo "::warning title=Invalid semver::${TARGET} is not a valid semver. Nothing to do."
           fi
 
       - name: Tag new target
         if: ${{ github.event_name == 'workflow_dispatch' }}
-        run: git tag -f ${{ github.event.inputs.version }} ${{ github.event.inputs.target }}
+        env:
+          MAJOR_VER: ${{ github.event.inputs.version }}
+        run: git tag -f "${MAJOR_VER}" "${TARGET}"
 
       - name: Push new tag
         if: ${{ github.event_name == 'workflow_dispatch' }}
+        env:
+          MAJOR_VER: ${{ github.event.inputs.version }}
         run: |
-          git push origin ${{ github.event.inputs.version }} --force
-          echo "::notice title=Main version tagged::Tagged ${{ github.event.inputs.target }} with ${{ github.event.inputs.version }}"
+          git push origin "${MAJOR_VER}" --force
+          echo "::notice title=Main version tagged::Tagged ${TARGET} with ${MAJOR_VER}"
