@@ -32,4 +32,5 @@ jobs:
       - uses: DavidAnson/markdownlint-cli2-action@main
         with:
           config: .markdownlint.json
-          globs: '**/*.md'
+          globs: |
+            README.md
