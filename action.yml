@@ -24,11 +24,13 @@ runs:
 
     - name: Download SSISDevOpsTools.exe
       shell: pwsh
-      run: Invoke-WebRequest -Uri https://aka.ms/SSISDevOpsTools -OutFile SSISDevOpsTools.exe
+      run: Invoke-WebRequest -Uri https://aka.ms/SSISDevOpsTools -OutFile SSISDevOpsTools.exe -ErrorAction 'Stop'
 
     - name: Extract SSISDevOpsTools.exe
       shell: pwsh
-      run: .\SSISDevOpsTools.exe /Q /C "/T:${{ steps.ssis-tools.outputs.ssis_tools_path }}"
+      run: |
+        .\SSISDevOpsTools.exe /Q /C "/T:${{ steps.ssis-tools.outputs.ssis_tools_path }}"
+        if ($LastExitCode -ne 0) { exit $LastExitCode }
 
     - name: Add SSIS tools path to system path
       shell: pwsh
