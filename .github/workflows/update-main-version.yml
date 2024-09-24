@@ -49,12 +49,14 @@ jobs:
             if [[ "${TARGET}" != "${MAJOR_VER}" ]]; then
               git tag -f "${MAJOR_VER}" "${TARGET}"
               git push origin "${MAJOR_VER}" --force
-              echo "::notice title=Main version tagged::Tagged "${TARGET}" with "${MAJOR_VER}""
+              echo "::notice title=Main version tagged::Tagged ${TARGET} with ${MAJOR_VER}"
             else
-              echo "::warning title=Already tagged::Target is already tagged with "${MAJOR_VER}". Nothing to do."
+              echo "::warning title=Already tagged::Target is already tagged with ${MAJOR_VER}. Nothing to do."
+              exit 1
             fi
           else
-            echo "::warning title=Invalid semver::"${TARGET}" is not a valid semver. Nothing to do."
+            echo "::warning title=Invalid semver::${TARGET} is not a valid semver. Nothing to do."
+            exit 1
           fi
 
       - name: Tag new target
