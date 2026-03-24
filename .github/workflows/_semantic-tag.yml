@@ -63,8 +63,13 @@ jobs:
           version=$(echo "$clean" | grep -oP 'Published release \K\S+' || true)
 
           if [ -n "$version" ]; then
-            release_url="https://github.com/${GITHUB_REPOSITORY}/releases/tag/${version}"
-            edit_url="https://github.com/${GITHUB_REPOSITORY}/releases/edit/${version}"
+            tag="$version"
+            case "$tag" in
+              v*) ;;
+              *) tag="v${tag}" ;;
+            esac
+
+            edit_url="https://github.com/${GITHUB_REPOSITORY}/releases/edit/${tag}"
 
             {
               echo "### Released ${version}"
@@ -73,13 +78,10 @@ jobs:
               echo ''
               echo '### Manual follow-up'
               echo ''
-              echo 'Publish this action to GitHub Marketplace by editing the release, enabling `Publish this Action to the GitHub Marketplace`, and clicking `Update release`.'
-              echo ''
-              echo "- [Release page](${release_url})"
-              echo "- [Edit release](${edit_url})"
+              echo "Publish this action to GitHub Marketplace by [editing the release](${edit_url}), enabling \`Publish this Action to the GitHub Marketplace\`, and clicking \`Update release\`."
             } >> "$GITHUB_STEP_SUMMARY"
 
-            echo "::notice title=Marketplace publish required::Release ${version} is published. Final manual step: edit ${edit_url} and enable 'Publish this Action to the GitHub Marketplace'."
+            echo "::notice title=Marketplace publish required::Release ${version} is published. Final manual step: edit the release and enable 'Publish this Action to the GitHub Marketplace'."
           elif echo "$clean" | grep -qi 'no relevant changes'; then
             {
               echo '### No release'
