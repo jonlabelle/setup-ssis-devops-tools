@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.2](https://github.com/jonlabelle/setup-ssis-devops-tools/compare/v1.7.1...v1.7.2) (2026-03-24)
+
+
+### Bug Fixes
+
+* support utf-8 without bom in PowerShell fallback ([#5](https://github.com/jonlabelle/setup-ssis-devops-tools/issues/5)) ([3f62dae](https://github.com/jonlabelle/setup-ssis-devops-tools/commit/3f62daecd9d72a74455b98997ff0bc7ad446d239))
+
 ## [1.7.1](https://github.com/jonlabelle/setup-ssis-devops-tools/compare/v1.7.0...v1.7.1) (2026-03-24)
 
 
