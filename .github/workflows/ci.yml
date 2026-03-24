@@ -82,6 +82,8 @@ jobs:
       - test
       - test-non-windows
     uses: ./.github/workflows/_semantic-tag.yml
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
     permissions:
       contents: write
       issues: write
