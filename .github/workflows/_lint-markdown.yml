@@ -1,0 +1,22 @@
+name: Lint markdown
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint markdown
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@main
+
+      - uses: DavidAnson/markdownlint-cli2-action@main
+        with:
+          config: .markdownlint.json
+          globs: |
+            README.md

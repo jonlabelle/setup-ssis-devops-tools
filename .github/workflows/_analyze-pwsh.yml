@@ -1,31 +1,17 @@
-name: analyze pwsh
+name: Analyze PowerShell
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '**.ps1'
-      - '**.psd1'
-      - '**.psm1'
-      - '.github/workflows/analyze-pwsh.yml'
-  pull_request:
-    types:
-      - opened
-      - edited
-      - synchronize
-    paths:
-      - '**.ps1'
-      - '**.psd1'
-      - '**.psm1'
-      - '.github/workflows/analyze-pwsh.yml'
-    branches:
-      - main
+  workflow_call:
   workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
 
 jobs:
   analyze:
-    name: PowerShell analysis
+    name: PSScriptAnalyzer
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -45,7 +31,15 @@ jobs:
           Import-Module -Name ConvertToSARIF
 
           $injectionHunterRules = (Get-Module -list InjectionHunter).Path
-          Invoke-ScriptAnalyzer -Settings PSScriptAnalyzerSettings.psd1 -CustomRulePath $injectionHunterRules -Path . -Recurse -OutVariable issues | ConvertTo-SARIF -FilePath results.sarif
+          $params = @{
+            Settings = 'PSScriptAnalyzerSettings.psd1'
+            CustomRulePath = $injectionHunterRules
+            Path = '.'
+            Recurse = $true
+            OutVariable = 'issues'
+          }
+
+          Invoke-ScriptAnalyzer @params | ConvertTo-SARIF -FilePath results.sarif
 
           $errors = $issues.Where({$_.Severity -eq 'Error'})
           $warnings = $issues.Where({$_.Severity -eq 'Warning'})

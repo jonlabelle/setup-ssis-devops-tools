@@ -1,0 +1,88 @@
+# Gated CI pipeline:
+#   Gate 1: Lint      - YAML, Markdown, Prettier (parallel)
+#   Gate 2: Analyze   - PSScriptAnalyzer           (needs: lint)
+#   Gate 3: Test      - Windows + non-Windows      (needs: analyze)
+#   Gate 4: Release   - Semantic release           (needs: test, push to main only)
+
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  issues: read
+  pull-requests: read
+  security-events: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'push' }}
+
+jobs:
+  lint-yaml:
+    name: Lint YAML
+    uses: ./.github/workflows/_lint-yaml.yml
+    permissions:
+      contents: read
+
+  lint-markdown:
+    name: Lint Markdown
+    uses: ./.github/workflows/_lint-markdown.yml
+    permissions:
+      contents: read
+
+  format-check:
+    name: Prettier
+    uses: ./.github/workflows/_format-check.yml
+    permissions:
+      contents: read
+
+  analyze-pwsh:
+    name: Analyze PowerShell
+    needs:
+      - lint-yaml
+      - lint-markdown
+      - format-check
+    uses: ./.github/workflows/_analyze-pwsh.yml
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+  test:
+    name: Test Windows setup
+    needs: analyze-pwsh
+    uses: ./.github/workflows/_test.yml
+    permissions:
+      contents: read
+
+  test-non-windows:
+    name: Test non-Windows guard
+    needs: analyze-pwsh
+    uses: ./.github/workflows/_test-non-windows-runner.yml
+    permissions:
+      contents: read
+
+  semantic-tag:
+    name: Semantic release
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs:
+      - test
+      - test-non-windows
+    uses: ./.github/workflows/_semantic-tag.yml
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write

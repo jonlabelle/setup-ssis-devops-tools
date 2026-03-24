@@ -25,6 +25,13 @@ on:
 env:
   TARGET: ${{ github.event.inputs.target || github.event.release.tag_name }}
 
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
 jobs:
   update-main-version:
     name: Update main version
@@ -71,4 +78,4 @@ jobs:
           MAJOR_VER: ${{ github.event.inputs.version }}
         run: |
           git push origin "${MAJOR_VER}" --force
-          echo "::notice title=Main version tagged::Tagged "${TARGET}" with "${MAJOR_VER}""
+          echo "::notice title=Main version tagged::Tagged ${TARGET} with ${MAJOR_VER}"

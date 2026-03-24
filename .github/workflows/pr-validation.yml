@@ -1,0 +1,27 @@
+name: PR validation
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  semantic-pr:
+    name: Semantic PR title
+    uses: ./.github/workflows/_semantic-pr-check.yml
+    permissions:
+      pull-requests: read
+
+  dependency-review:
+    name: Dependency review
+    uses: ./.github/workflows/_dependency-review.yml
+    permissions:
+      contents: read
+      pull-requests: write

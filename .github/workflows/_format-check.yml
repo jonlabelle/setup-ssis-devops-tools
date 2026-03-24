@@ -1,0 +1,19 @@
+name: Format check
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-format:
+    name: Format check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@main
+
+      - name: Run Prettier format check
+        run: npx prettier --check --log-level log '**.{md,yaml,yml,js,json}'

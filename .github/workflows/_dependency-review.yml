@@ -1,13 +1,9 @@
-name: dependency review
+name: Dependency review
 
 # https://github.com/actions/dependency-review-action
 
 on:
-  pull_request:
-    types:
-      - opened
-      - edited
-      - synchronize
+  workflow_call:
 
 permissions:
   contents: read
