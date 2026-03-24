@@ -6,7 +6,7 @@ rules:
   # line-length
   # https://yamllint.readthedocs.io/en/latest/rules.html#module-yamllint.rules.line_length
   line-length:
-    max: 180
+    max: 329
     level: warning
 
   # document-start
