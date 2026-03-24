@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/jonlabelle/setup-ssis-devops-tools/compare/v1.7.0...v1.7.1) (2026-03-24)
+
+
+### Bug Fixes
+
+* ensure version tags are prefixed with 'v' for GitHub release URLs ([a2b03ba](https://github.com/jonlabelle/setup-ssis-devops-tools/commit/a2b03ba09a9a615cf1a65b2db146bba064e071a7))
+
 # [1.7.0](https://github.com/jonlabelle/setup-ssis-devops-tools/compare/v1.6.0...v1.7.0) (2026-03-24)
 
 
