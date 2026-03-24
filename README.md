@@ -1,6 +1,6 @@
 # Setup SSIS DevOps Tools
 
-[![test](https://github.com/jonlabelle/setup-ssis-devops-tools/actions/workflows/test.yml/badge.svg)](https://github.com/jonlabelle/setup-ssis-devops-tools/actions/workflows/test.yml)
+[![CI](https://github.com/jonlabelle/setup-ssis-devops-tools/actions/workflows/ci.yml/badge.svg)](https://github.com/jonlabelle/setup-ssis-devops-tools/actions/workflows/ci.yml)
 [![latest release](https://img.shields.io/github/v/tag/jonlabelle/setup-ssis-devops-tools.svg?label=version&sort=semver)](https://github.com/jonlabelle/setup-ssis-devops-tools/releases)
 
 > A GitHub action that installs the latest standalone SQL Server Integration
@@ -25,7 +25,7 @@ executables provided are:
 
 After running this step, **SSISBuild.exe** and **SSISDeploy.exe** are available for use from your path.
 
-See the [tests](https://github.com/jonlabelle/setup-ssis-devops-tools/blob/main/.github/workflows/test.yml) for example usage.
+See the [CI workflow](https://github.com/jonlabelle/setup-ssis-devops-tools/blob/main/.github/workflows/ci.yml) for example usage.
 
 ## License
 

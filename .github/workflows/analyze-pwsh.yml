@@ -1,31 +1,17 @@
-name: analyze pwsh
+name: Analyze PowerShell
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '**.ps1'
-      - '**.psd1'
-      - '**.psm1'
-      - '.github/workflows/analyze-pwsh.yml'
-  pull_request:
-    types:
-      - opened
-      - edited
-      - synchronize
-    paths:
-      - '**.ps1'
-      - '**.psd1'
-      - '**.psm1'
-      - '.github/workflows/analyze-pwsh.yml'
-    branches:
-      - main
+  workflow_call:
   workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
 
 jobs:
   analyze:
-    name: PowerShell analysis
+    name: PSScriptAnalyzer
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

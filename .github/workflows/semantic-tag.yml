@@ -1,17 +1,12 @@
-name: semantic tag
+name: Semantic tag
 
 on:
-  push:
-    branches:
-      - main
+  workflow_call:
   workflow_dispatch:
-
-permissions:
-  contents: read # for checkout
 
 jobs:
   semantic-tag:
-    name: Semantic tag
+    name: Semantic release
     runs-on: ubuntu-latest
 
     # https://github.com/semantic-release/semantic-release/blob/master/docs/recipes/ci-configurations/github-actions.md
@@ -23,6 +18,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@main
         with:
+          fetch-depth: 0
+          fetch-tags: true
           persist-credentials: false
 
       - name: Setup Node.js
@@ -37,10 +34,44 @@ jobs:
           @semantic-release/commit-analyzer
           @semantic-release/exec
           @semantic-release/git
+          @semantic-release/github
           @semantic-release/release-notes-generator
           @semantic-release/changelog
 
-      - name: Maybe create tag
+      - name: Create release
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: npx semantic-release --ci
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -o pipefail
+          npx semantic-release --ci 2>&1 | tee "$RUNNER_TEMP/release.log"
+
+      - name: Write release summary
+        if: always()
+        run: |
+          if [ ! -f "$RUNNER_TEMP/release.log" ]; then
+            {
+              echo '### Release failed'
+              echo ''
+              echo 'Check the job log for details.'
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          clean=$(sed 's/\x1b\[[0-9;]*m//g' "$RUNNER_TEMP/release.log")
+          version=$(echo "$clean" | grep -oP 'Published release \K\S+' || true)
+
+          if [ -n "$version" ]; then
+            echo "### Released ${version}" >> "$GITHUB_STEP_SUMMARY"
+          elif echo "$clean" | grep -qi 'no relevant changes'; then
+            {
+              echo '### No release'
+              echo ''
+              echo 'No relevant changes were detected since the last release.'
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            {
+              echo '### Release failed'
+              echo ''
+              echo 'Check the job log for details.'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi

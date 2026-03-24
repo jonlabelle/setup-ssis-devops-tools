@@ -1,25 +1,11 @@
-name: lint markdown
+name: Lint markdown
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '.github/workflows/lint-markdown.yml'
-      - '.markdownlint.json'
-      - '**.md'
-  pull_request:
-    types:
-      - opened
-      - edited
-      - synchronize
-    paths:
-      - '.github/workflows/lint-markdown.yml'
-      - '.markdownlint.json'
-      - '**.md'
-    branches:
-      - main
+  workflow_call:
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   lint:

@@ -1,31 +1,11 @@
-name: format check
+name: Format check
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '**.md'
-      - '**.yml'
-      - '**.yaml'
-      - '**.js'
-      - '**.json'
-      - '.github/workflows/format-check.yml'
-  pull_request:
-    types:
-      - opened
-      - edited
-      - synchronize
-    branches:
-      - main
-    paths:
-      - '**.md'
-      - '**.yml'
-      - '**.yaml'
-      - '**.js'
-      - '**.json'
-      - '.github/workflows/format-check.yml'
+  workflow_call:
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   check-format:
