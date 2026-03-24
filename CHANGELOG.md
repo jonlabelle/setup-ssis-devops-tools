@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.7.0](https://github.com/jonlabelle/setup-ssis-devops-tools/compare/v1.6.0...v1.7.0) (2026-03-24)
+
+
+### Features
+
+* indicate instructions for releasing action to github marketplace ([be20049](https://github.com/jonlabelle/setup-ssis-devops-tools/commit/be2004959a08ec882f503df07a539b7d949cebc1))
+
 # [1.6.0](https://github.com/jonlabelle/setup-ssis-devops-tools/compare/v1.5.0...v1.6.0) (2026-03-24)
 
 
