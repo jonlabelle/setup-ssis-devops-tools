@@ -31,7 +31,15 @@ jobs:
           Import-Module -Name ConvertToSARIF
 
           $injectionHunterRules = (Get-Module -list InjectionHunter).Path
-          Invoke-ScriptAnalyzer -Settings PSScriptAnalyzerSettings.psd1 -CustomRulePath $injectionHunterRules -Path . -Recurse -OutVariable issues | ConvertTo-SARIF -FilePath results.sarif
+          $params = @{
+            Settings = 'PSScriptAnalyzerSettings.psd1'
+            CustomRulePath = $injectionHunterRules
+            Path = '.'
+            Recurse = $true
+            OutVariable = 'issues'
+          }
+
+          Invoke-ScriptAnalyzer @params | ConvertTo-SARIF -FilePath results.sarif
 
           $errors = $issues.Where({$_.Severity -eq 'Error'})
           $warnings = $issues.Where({$_.Severity -eq 'Warning'})
