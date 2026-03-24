@@ -33,19 +33,19 @@ concurrency:
 jobs:
   lint-yaml:
     name: Lint YAML
-    uses: ./.github/workflows/lint-yaml.yml
+    uses: ./.github/workflows/_lint-yaml.yml
     permissions:
       contents: read
 
   lint-markdown:
     name: Lint Markdown
-    uses: ./.github/workflows/lint-markdown.yml
+    uses: ./.github/workflows/_lint-markdown.yml
     permissions:
       contents: read
 
   format-check:
     name: Prettier
-    uses: ./.github/workflows/format-check.yml
+    uses: ./.github/workflows/_format-check.yml
     permissions:
       contents: read
 
@@ -55,7 +55,7 @@ jobs:
       - lint-yaml
       - lint-markdown
       - format-check
-    uses: ./.github/workflows/analyze-pwsh.yml
+    uses: ./.github/workflows/_analyze-pwsh.yml
     permissions:
       actions: read
       contents: read
@@ -64,14 +64,14 @@ jobs:
   test:
     name: Test Windows setup
     needs: analyze-pwsh
-    uses: ./.github/workflows/test.yml
+    uses: ./.github/workflows/_test.yml
     permissions:
       contents: read
 
   test-non-windows:
     name: Test non-Windows guard
     needs: analyze-pwsh
-    uses: ./.github/workflows/test-non-windows-runner.yml
+    uses: ./.github/workflows/_test-non-windows-runner.yml
     permissions:
       contents: read
 
@@ -81,7 +81,7 @@ jobs:
     needs:
       - test
       - test-non-windows
-    uses: ./.github/workflows/semantic-tag.yml
+    uses: ./.github/workflows/_semantic-tag.yml
     permissions:
       contents: write
       issues: write
