@@ -23,15 +23,16 @@ runs:
       shell: pwsh
       id: paths
       run: |
+        $ErrorActionPreference = 'Stop'
         $rootPath = Join-Path -Path '${{ runner.temp }}' -ChildPath 'setup-ssis-devops-tools'
         $toolsPath = Join-Path -Path $rootPath -ChildPath 'ssis-tools'
         $installerPath = Join-Path -Path $rootPath -ChildPath 'SSISDevOpsTools.exe'
 
         if (Test-Path -LiteralPath $rootPath) {
-          Remove-Item -LiteralPath $rootPath -Recurse -Force
+          Remove-Item -LiteralPath $rootPath -Recurse -Force -ErrorAction Stop
         }
 
-        New-Item -Path $toolsPath -ItemType Directory -Force | Out-Null
+        New-Item -Path $toolsPath -ItemType Directory -Force -ErrorAction Stop | Out-Null
 
         [System.IO.File]::AppendAllText(
           $env:GITHUB_OUTPUT,
@@ -55,7 +56,8 @@ runs:
     - name: Extract SSISDevOpsTools.exe
       shell: pwsh
       run: |
-        & '${{ steps.paths.outputs.installer_path }}' /Q /C "/T:${{ steps.paths.outputs.ssis_tools_path }}"
+        $toolsPath = '${{ steps.paths.outputs.ssis_tools_path }}'
+        & '${{ steps.paths.outputs.installer_path }}' /Q /C "/T:`"$toolsPath`""
         if ($LastExitCode -ne 0) { exit $LastExitCode }
 
     - name: Verify SSIS tools installation
