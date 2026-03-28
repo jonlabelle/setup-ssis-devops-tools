@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.3](https://github.com/jonlabelle/setup-ssis-devops-tools/compare/v1.7.2...v1.7.3) (2026-03-28)
+
+
+### Bug Fixes
+
+* install SSIS tools in runner temp ([#6](https://github.com/jonlabelle/setup-ssis-devops-tools/issues/6)) ([1817b4e](https://github.com/jonlabelle/setup-ssis-devops-tools/commit/1817b4e8295b14756c8c9e327cfa811cad768886))
+
 ## [1.7.2](https://github.com/jonlabelle/setup-ssis-devops-tools/compare/v1.7.1...v1.7.2) (2026-03-24)
 
 
