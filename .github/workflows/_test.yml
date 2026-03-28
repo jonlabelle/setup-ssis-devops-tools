@@ -16,7 +16,31 @@ jobs:
         uses: actions/checkout@main
 
       - name: Setup SSIS tools
+        id: setup-ssis-tools
         uses: ./
+
+      - name: Assert SSIS tools output
+        shell: pwsh
+        run: |
+          $toolsPath = '${{ steps.setup-ssis-tools.outputs.ssis_tools_path }}'
+          if ([string]::IsNullOrWhiteSpace($toolsPath)) {
+            Write-Error 'Expected ssis_tools_path action output to be set.'
+            exit 1
+          }
+
+          $expectedRoot = Join-Path -Path '${{ runner.temp }}' -ChildPath 'setup-ssis-devops-tools'
+          if (-not $toolsPath.StartsWith($expectedRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
+            Write-Error "Expected SSIS tools to be installed inside '$expectedRoot' but got '$toolsPath'."
+            exit 1
+          }
+
+          foreach ($expectedFile in 'SSISBuild.exe', 'SSISDeploy.exe') {
+            $expectedPath = Join-Path -Path $toolsPath -ChildPath $expectedFile
+            if (-not (Test-Path -LiteralPath $expectedPath)) {
+              Write-Error "Expected tool '$expectedFile' to exist at '$expectedPath'."
+              exit 1
+            }
+          }
 
       - name: Show SSISBuild.exe help
         run: SSISBuild.exe -h

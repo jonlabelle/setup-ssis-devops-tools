@@ -4,6 +4,10 @@ author: Jon LaBelle
 branding:
   icon: database
   color: yellow
+outputs:
+  ssis_tools_path:
+    description: Path where SSISBuild.exe and SSISDeploy.exe are installed
+    value: ${{ steps.paths.outputs.ssis_tools_path }}
 
 runs:
   using: composite
@@ -15,32 +19,71 @@ runs:
         echo "::error title=✘ Unsupported runner::Please choose a Windows runner to execute this action, e.g. windows-latest"
         exit 1
 
-    - name: Output SSIS tools path
+    - name: Prepare SSIS tools paths
       shell: pwsh
-      id: ssis-tools
+      id: paths
       run: |
-        $toolsPath = Join-Path -Path '${{ github.action_path }}' -ChildPath 'ssis-tools'
-        [System.IO.File]::AppendAllText($env:GITHUB_OUTPUT, "ssis_tools_path=$toolsPath$([Environment]::NewLine)", [System.Text.UTF8Encoding]::new($false))
+        $ErrorActionPreference = 'Stop'
+        $rootPath = Join-Path -Path '${{ runner.temp }}' -ChildPath 'setup-ssis-devops-tools'
+        $toolsPath = Join-Path -Path $rootPath -ChildPath 'ssis-tools'
+        $installerPath = Join-Path -Path $rootPath -ChildPath 'SSISDevOpsTools.exe'
+
+        if (Test-Path -LiteralPath $rootPath) {
+          Remove-Item -LiteralPath $rootPath -Recurse -Force -ErrorAction Stop
+        }
+
+        New-Item -Path $toolsPath -ItemType Directory -Force -ErrorAction Stop | Out-Null
+
+        [System.IO.File]::AppendAllText(
+          $env:GITHUB_OUTPUT,
+          "ssis_tools_path=$toolsPath$([Environment]::NewLine)",
+          [System.Text.UTF8Encoding]::new($false)
+        )
+        [System.IO.File]::AppendAllText(
+          $env:GITHUB_OUTPUT,
+          "installer_path=$installerPath$([Environment]::NewLine)",
+          [System.Text.UTF8Encoding]::new($false)
+        )
 
     - name: Download SSISDevOpsTools.exe
       shell: pwsh
       run: >-
         Invoke-WebRequest
         -Uri https://aka.ms/SSISDevOpsTools
-        -OutFile SSISDevOpsTools.exe
+        -OutFile '${{ steps.paths.outputs.installer_path }}'
         -ErrorAction 'Stop'
 
     - name: Extract SSISDevOpsTools.exe
       shell: pwsh
       run: |
-        .\SSISDevOpsTools.exe /Q /C "/T:${{ steps.ssis-tools.outputs.ssis_tools_path }}"
+        $toolsPath = '${{ steps.paths.outputs.ssis_tools_path }}'
+        $extractTargetArgument = "/T:$toolsPath"
+        & '${{ steps.paths.outputs.installer_path }}' /Q /C $extractTargetArgument
         if ($LastExitCode -ne 0) { exit $LastExitCode }
 
-    - name: Add SSIS tools path to system path
+    - name: Verify SSIS tools installation
+      shell: pwsh
+      run: |
+        $toolsPath = '${{ steps.paths.outputs.ssis_tools_path }}'
+        $missingFiles = @(
+          foreach ($expectedFile in 'SSISBuild.exe', 'SSISDeploy.exe') {
+            $expectedPath = Join-Path -Path $toolsPath -ChildPath $expectedFile
+            if (-not (Test-Path -LiteralPath $expectedPath)) {
+              $expectedFile
+            }
+          }
+        )
+
+        if ($missingFiles.Count -gt 0) {
+          Write-Error "Failed to find expected SSIS tools in '$toolsPath': $($missingFiles -join ', ')"
+          exit 1
+        }
+
+    - name: Add SSIS tools path to job PATH
       shell: pwsh
       run: |
         [System.IO.File]::AppendAllText(
           $env:GITHUB_PATH,
-          "${{ steps.ssis-tools.outputs.ssis_tools_path }}$([Environment]::NewLine)",
+          "${{ steps.paths.outputs.ssis_tools_path }}$([Environment]::NewLine)",
           [System.Text.UTF8Encoding]::new($false)
         )
