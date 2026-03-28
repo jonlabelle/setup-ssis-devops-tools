@@ -20,10 +20,17 @@ executables provided are:
 
 ```yaml
 - name: Setup SSIS devops tools
+  id: setup-ssis-tools
   uses: jonlabelle/setup-ssis-devops-tools@v1
+
+- name: Show installed location
+  shell: pwsh
+  run: |
+    Write-Host "SSIS tools path: ${{ steps.setup-ssis-tools.outputs.ssis_tools_path }}"
 ```
 
-After running this step, **SSISBuild.exe** and **SSISDeploy.exe** are available for use from your path.
+After running this step, **SSISBuild.exe** and **SSISDeploy.exe** are available from your job `PATH`.
+The tools are installed in the runner temp directory, and the resolved install location is also available through the `ssis_tools_path` output.
 
 See the [CI workflow](https://github.com/jonlabelle/setup-ssis-devops-tools/blob/main/.github/workflows/ci.yml) for example usage.
 
