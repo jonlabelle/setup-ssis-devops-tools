@@ -1,9 +1,10 @@
-name: Setup SQL Server SSIS devops tools
-description: Setup standalone SQL Server Integration Service (SSIS) devops tools
+name: Setup SSIS DevOps tools
+description: Setup standalone SQL Server Integration Services (SSIS) DevOps tools
 author: Jon LaBelle
 branding:
   icon: database
   color: yellow
+
 outputs:
   ssis_tools_path:
     description: Path where SSISBuild.exe and SSISDeploy.exe are installed
@@ -16,7 +17,7 @@ runs:
       if: ${{ runner.os != 'Windows' }}
       shell: sh
       run: |
-        echo "::error title=✘ Unsupported runner::Please choose a Windows runner to execute this action, e.g. windows-latest"
+        echo "::error title=✘ Unsupported runner::A Windows runner is required, e.g. windows-latest"
         exit 1
 
     - name: Prepare SSIS tools paths
@@ -24,6 +25,7 @@ runs:
       id: paths
       run: |
         $ErrorActionPreference = 'Stop'
+
         $rootPath = Join-Path -Path '${{ runner.temp }}' -ChildPath 'setup-ssis-devops-tools'
         $toolsPath = Join-Path -Path $rootPath -ChildPath 'ssis-tools'
         $installerPath = Join-Path -Path $rootPath -ChildPath 'SSISDevOpsTools.exe'
@@ -39,6 +41,7 @@ runs:
           "ssis_tools_path=$toolsPath$([Environment]::NewLine)",
           [System.Text.UTF8Encoding]::new($false)
         )
+
         [System.IO.File]::AppendAllText(
           $env:GITHUB_OUTPUT,
           "installer_path=$installerPath$([Environment]::NewLine)",
@@ -58,6 +61,7 @@ runs:
       run: |
         $toolsPath = '${{ steps.paths.outputs.ssis_tools_path }}'
         $extractTargetArgument = "/T:$toolsPath"
+
         & '${{ steps.paths.outputs.installer_path }}' /Q /C $extractTargetArgument
         if ($LastExitCode -ne 0) { exit $LastExitCode }
 
@@ -65,6 +69,7 @@ runs:
       shell: pwsh
       run: |
         $toolsPath = '${{ steps.paths.outputs.ssis_tools_path }}'
+
         $missingFiles = @(
           foreach ($expectedFile in 'SSISBuild.exe', 'SSISDeploy.exe') {
             $expectedPath = Join-Path -Path $toolsPath -ChildPath $expectedFile
