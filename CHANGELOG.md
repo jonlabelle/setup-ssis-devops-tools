@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.8.0](https://github.com/jonlabelle/setup-ssis-devops-tools/compare/v1.7.3...v1.8.0) (2026-03-29)
+
+
+### Features
+
+* **docs:** simplify example usage ([0f082b7](https://github.com/jonlabelle/setup-ssis-devops-tools/commit/0f082b73dfdaafb54d8ce335a4a140fee855ce91))
+
 ## [1.7.3](https://github.com/jonlabelle/setup-ssis-devops-tools/compare/v1.7.2...v1.7.3) (2026-03-28)
 
 
