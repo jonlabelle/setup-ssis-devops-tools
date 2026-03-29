@@ -30,11 +30,11 @@ jobs:
       - name: Setup SSIS DevOps Tools
         uses: jonlabelle/setup-ssis-devops-tools@v1
 
-      - name: Show SSISBuild help
-        run: SSISBuild.exe -h
+      - name: Build SSIS project
+        run: SSISBuild.exe "-p:${{ github.workspace }}\src\Demo\Demo.dtproj" "-o:${{ runner.temp }}\ssis"
 
-      - name: Show SSISDeploy help
-        run: SSISDeploy.exe -h
+      - name: Deploy ISPAC to SSIS catalog
+        run: SSISDeploy.exe "-s:${{ runner.temp }}\ssis\Demo.ispac" "-d:catalog;/SSISDB/Demo;my-ssis-server" "-at:win"
 ```
 
 After the setup step runs, **SSISBuild.exe** and **SSISDeploy.exe** are available from your job `PATH`.
