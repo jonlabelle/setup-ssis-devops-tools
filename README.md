@@ -20,7 +20,6 @@ tools available:
 
 ```yaml
 name: Use SSIS DevOps Tools
-
 on:
   workflow_dispatch:
 
@@ -29,21 +28,16 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Setup SSIS DevOps Tools
-        id: setup-ssis-tools
         uses: jonlabelle/setup-ssis-devops-tools@v1
 
-      - name: Show installed location
-        shell: pwsh
-        run: |
-          Write-Host "SSIS tools path: ${{ steps.setup-ssis-tools.outputs.ssis_tools_path }}"
-
-      - name: Show SSISBuild.exe help
-        shell: pwsh
+      - name: Show SSISBuild help
         run: SSISBuild.exe -h
+
+      - name: Show SSISDeploy help
+        run: SSISDeploy.exe -h
 ```
 
-After the setup step runs, **SSISBuild.exe** and **SSISDeploy.exe** are
-available from your job `PATH`.
+After the setup step runs, **SSISBuild.exe** and **SSISDeploy.exe** are available from your job `PATH`.
 
 ## Outputs
 
