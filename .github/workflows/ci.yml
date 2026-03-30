@@ -61,7 +61,6 @@ jobs:
   devskim:
     name: DevSkim
     uses: ./.github/workflows/_devskim.yml
-    continue-on-error: true
     permissions:
       actions: read
       contents: read
