@@ -29,5 +29,5 @@
   "powershell.scriptAnalysis.settingsPath": "PSScriptAnalyzerSettings.psd1",
 
   // streetsidesoftware.code-spell-checker
-  "cSpell.words": ["commitlint", "jonlabelle", "SSIS"]
+  "cSpell.words": ["commitlint", "devskim", "jonlabelle", "SSIS"]
 }
