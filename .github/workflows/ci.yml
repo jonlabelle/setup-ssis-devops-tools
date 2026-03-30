@@ -1,8 +1,9 @@
 # Gated CI pipeline:
-#   Gate 1: Lint      - YAML, Markdown, Prettier   (parallel)
-#   Gate 2: Analyze   - PSScriptAnalyzer, Code QL  (needs: lint)
-#   Gate 3: Test      - Windows + non-Windows      (needs: analyze)
-#   Gate 4: Release   - Semantic release           (needs: test, push to main only)
+#   Gate 1: Lint        - YAML, Markdown, Prettier             (parallel)
+#   Gate 2: Analyze     - PSScriptAnalyzer (analyze-pwsh)      (needs: lint-yaml, lint-markdown, format-check)
+#   Gate 3: Test        - Windows + non-Windows                (needs: analyze-pwsh)
+#   Gate 4: Release     - Semantic release                     (needs: test, push to main only)
+#   Non-gating: CodeQL, DevSkim - Security analysis            (run independently)
 
 name: CI
 
@@ -52,6 +53,14 @@ jobs:
   codeql:
     name: CodeQL
     uses: ./.github/workflows/_codeql.yml
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+  devskim:
+    name: DevSkim
+    uses: ./.github/workflows/_devskim.yml
     permissions:
       actions: read
       contents: read
