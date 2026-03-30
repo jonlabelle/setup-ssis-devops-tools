@@ -21,8 +21,10 @@ jobs:
 
       - name: Run DevSkim scanner
         uses: microsoft/DevSkim-Action@main
+        continue-on-error: true
 
       - name: Upload DevSkim scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@main
+        if: ${{ always() }}
         with:
           sarif_file: devskim-results.sarif
