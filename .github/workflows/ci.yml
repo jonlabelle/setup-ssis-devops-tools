@@ -1,6 +1,6 @@
 # Gated CI pipeline:
-#   Gate 1: Lint      - YAML, Markdown, Prettier (parallel)
-#   Gate 2: Analyze   - PSScriptAnalyzer           (needs: lint)
+#   Gate 1: Lint      - YAML, Markdown, Prettier   (parallel)
+#   Gate 2: Analyze   - PSScriptAnalyzer, Code QL  (needs: lint)
 #   Gate 3: Test      - Windows + non-Windows      (needs: analyze)
 #   Gate 4: Release   - Semantic release           (needs: test, push to main only)
 
