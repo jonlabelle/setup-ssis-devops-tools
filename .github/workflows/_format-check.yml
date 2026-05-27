@@ -16,4 +16,4 @@ jobs:
         uses: actions/checkout@main
 
       - name: Run Prettier format check
-        run: npx prettier --check --log-level log '**.{md,yaml,yml,js,json}'
+        run: npx prettier --check --log-level log '**/*.{md,yaml,yml,js,json}'

@@ -15,8 +15,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@main
 
-      - uses: DavidAnson/markdownlint-cli2-action@main
+      - name: Run markdownlint
+        uses: DavidAnson/markdownlint-cli2-action@main
         with:
-          config: .markdownlint.json
+          config: .markdownlint-cli2.jsonc
           globs: |
-            README.md
+            "**/*.md"
+            "#node_modules"
+            "#CHANGELOG.md"
