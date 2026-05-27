@@ -1,5 +1,5 @@
 {
-  "branches": "main",
+  "branches": ["main"],
   "repositoryUrl": "https://github.com/jonlabelle/setup-ssis-devops-tools.git",
   "tagFormat": "v${version}",
   "debug": false,
@@ -26,7 +26,7 @@
     [
       "@semantic-release/github",
       {
-        "releaseNameTemplate": "Release <%= nextRelease.name %>"
+        "releaseNameTemplate": "Release <%= nextRelease.gitTag %>"
       }
     ]
   ]
