@@ -1,9 +1,9 @@
-name: Update major tag
-
 # Re-tags the latest release with its moving major tag
 # Examples: `v1.2.0 -> v1` or `v2.9.0 -> v2`
 # Triggers: after a release is published, or manually dispatched
 # Similar to: https://github.com/actions/checkout/blob/main/.github/workflows/update-main-version.yml
+
+name: Update major tag
 
 on:
   release:
@@ -51,16 +51,11 @@ jobs:
       - name: Auto-update major tag with ${{ env.TARGET }}
         if: ${{ github.event_name != 'workflow_dispatch' }}
         run: |
-          if [[ "${TARGET}" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          if [[ "${TARGET}" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?(\+[a-zA-Z0-9.]+)?$ ]]; then
             MAJOR_VER="$(echo "${TARGET}" | cut -d. -f1)"
-            if [[ "${TARGET}" != "${MAJOR_VER}" ]]; then
-              git tag -f "${MAJOR_VER}" "${TARGET}"
-              git push origin "${MAJOR_VER}" --force
-              echo "::notice title=Major tag updated::Tagged ${TARGET} with ${MAJOR_VER}"
-            else
-              echo "::warning title=Already tagged::Target is already tagged with ${MAJOR_VER}. Nothing to do."
-              exit 1
-            fi
+            git tag -f "${MAJOR_VER}" "${TARGET}"
+            git push origin "${MAJOR_VER}" --force
+            echo "::notice title=Major tag updated::Tagged ${TARGET} with ${MAJOR_VER}"
           else
             echo "::warning title=Invalid semver::${TARGET} is not a valid semver. Nothing to do."
             exit 1
