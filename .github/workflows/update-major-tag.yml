@@ -1,7 +1,5 @@
-# Re-tags the latest release with its moving major tag
-# Examples: `v1.2.0 -> v1` or `v2.9.0 -> v2`
-# Triggers: after a release is published, or manually dispatched
-# Similar to: https://github.com/actions/checkout/blob/main/.github/workflows/update-main-version.yml
+# Re-tags the latest release with its moving major tag (e.g. v1.2.0 -> v1).
+# Triggers: after a release is published, or via manual dispatch.
 
 name: Update major tag
 
@@ -20,7 +18,6 @@ on:
         description: |
           The major tag to update. Example: v1
         required: true
-        default: 'v1'
 
 env:
   TARGET: ${{ github.event.inputs.target || github.event.release.tag_name }}
@@ -43,6 +40,26 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
+      - name: Validate inputs
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        env:
+          MAJOR_VER: ${{ github.event.inputs.version }}
+        run: |
+          if ! git rev-parse --verify "${TARGET}^{}" >/dev/null 2>&1; then
+            echo "::error title=Invalid target::Target ref '${TARGET}' does not exist in the repository"
+            exit 1
+          fi
+
+          if [[ ! "${MAJOR_VER}" =~ ^v[0-9]+$ ]]; then
+            echo "::error title=Invalid version::Version '${MAJOR_VER}' is not a valid major tag (expected format: v1, v2, etc.)"
+            exit 1
+          fi
+
+          if [[ "${TARGET}" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+-.+ ]]; then
+            echo "::error title=Pre-release target::Target '${TARGET}' is a pre-release and should not update the stable major tag"
+            exit 1
+          fi
+
       - name: Config git
         run: |
           git config user.name "github-actions[bot]"
@@ -51,7 +68,7 @@ jobs:
       - name: Auto-update major tag with ${{ env.TARGET }}
         if: ${{ github.event_name != 'workflow_dispatch' }}
         run: |
-          if [[ "${TARGET}" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?(\+[a-zA-Z0-9.]+)?$ ]]; then
+          if [[ "${TARGET}" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             MAJOR_VER="$(echo "${TARGET}" | cut -d. -f1)"
             git tag -f "${MAJOR_VER}" "${TARGET}"
             git push origin "${MAJOR_VER}" --force
@@ -61,13 +78,13 @@ jobs:
             exit 1
           fi
 
-      - name: Tag new target
+      - name: Tag ${{ github.event.inputs.version }} -> ${{ env.TARGET }}
         if: ${{ github.event_name == 'workflow_dispatch' }}
         env:
           MAJOR_VER: ${{ github.event.inputs.version }}
         run: git tag -f "${MAJOR_VER}" "${TARGET}"
 
-      - name: Push new tag
+      - name: Push ${{ github.event.inputs.version }}
         if: ${{ github.event_name == 'workflow_dispatch' }}
         env:
           MAJOR_VER: ${{ github.event.inputs.version }}
