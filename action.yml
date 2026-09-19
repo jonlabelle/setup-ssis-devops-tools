@@ -60,26 +60,35 @@ runs:
       shell: pwsh
       run: |
         $toolsPath = '${{ steps.paths.outputs.ssis_tools_path }}'
-        $extractTargetArgument = "/T:$toolsPath"
+        $installerPath = '${{ steps.paths.outputs.installer_path }}'
+        $extractArguments = '/Q', '/C', "/T:`"$toolsPath`""
 
-        & '${{ steps.paths.outputs.installer_path }}' /Q /C $extractTargetArgument
-        if ($LastExitCode -ne 0) { exit $LastExitCode }
+        $process = Start-Process -FilePath $installerPath -ArgumentList $extractArguments -Wait -PassThru -NoNewWindow
+        if ($process.ExitCode -ne 0) { exit $process.ExitCode }
 
     - name: Verify SSIS tools installation
       shell: pwsh
       run: |
         $toolsPath = '${{ steps.paths.outputs.ssis_tools_path }}'
+        $timeout = (Get-Date).AddSeconds(60)
 
-        $missingFiles = @(
-          foreach ($expectedFile in 'SSISBuild.exe', 'SSISDeploy.exe') {
-            $expectedPath = Join-Path -Path $toolsPath -ChildPath $expectedFile
-            if (-not (Test-Path -LiteralPath $expectedPath)) {
-              $expectedFile
+        do {
+          $missingFiles = @(
+            foreach ($expectedFile in 'SSISBuild.exe', 'SSISDeploy.exe') {
+              $expectedPath = Join-Path -Path $toolsPath -ChildPath $expectedFile
+              if (-not (Test-Path -LiteralPath $expectedPath)) {
+                $expectedFile
+              }
             }
-          }
-        )
+          )
+
+          if ($missingFiles.Count -eq 0) { break }
+
+          Start-Sleep -Milliseconds 500
+        } while ((Get-Date) -lt $timeout)
 
         if ($missingFiles.Count -gt 0) {
+          Get-ChildItem -LiteralPath $toolsPath | Format-Table -AutoSize
           Write-Error "Failed to find expected SSIS tools in '$toolsPath': $($missingFiles -join ', ')"
           exit 1
         }
