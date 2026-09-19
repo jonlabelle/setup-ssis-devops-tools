@@ -21,12 +21,14 @@ runs:
         exit 1
 
     - name: Prepare SSIS tools paths
+      env:
+        RUNNER_TEMP_PATH: ${{ runner.temp }}
       shell: pwsh
       id: paths
       run: |
         $ErrorActionPreference = 'Stop'
 
-        $rootPath = Join-Path -Path '${{ runner.temp }}' -ChildPath 'setup-ssis-devops-tools'
+        $rootPath = Join-Path -Path $env:RUNNER_TEMP_PATH -ChildPath 'setup-ssis-devops-tools'
         $toolsPath = Join-Path -Path $rootPath -ChildPath 'ssis-tools'
         $installerPath = Join-Path -Path $rootPath -ChildPath 'SSISDevOpsTools.exe'
 
@@ -49,11 +51,13 @@ runs:
         )
 
     - name: Download SSISDevOpsTools.exe
+      env:
+        INSTALLER_PATH: ${{ steps.paths.outputs.installer_path }}
       shell: pwsh
       run: |
         $installerUri = 'https://download.microsoft.com/download/5/1/4/5144b772-d3b0-4e1c-a05b-5376f2ea0fc1/SSISDevOpsTools-1.0.0.0.exe'
         $expectedHash = '5B721116D982457EF2FB8C584EF8AE24B7266E519FD5F16CAA867FA32EBDD14F'
-        $installerPath = '${{ steps.paths.outputs.installer_path }}'
+        $installerPath = $env:INSTALLER_PATH
 
         Invoke-WebRequest -Uri $installerUri -OutFile $installerPath -ErrorAction 'Stop'
 
@@ -65,19 +69,24 @@ runs:
         }
 
     - name: Extract SSISDevOpsTools.exe
+      env:
+        INSTALLER_PATH: ${{ steps.paths.outputs.installer_path }}
+        SSIS_TOOLS_PATH: ${{ steps.paths.outputs.ssis_tools_path }}
       shell: pwsh
       run: |
-        $toolsPath = '${{ steps.paths.outputs.ssis_tools_path }}'
-        $installerPath = '${{ steps.paths.outputs.installer_path }}'
+        $toolsPath = $env:SSIS_TOOLS_PATH
+        $installerPath = $env:INSTALLER_PATH
         $extractArguments = '/Q', '/C', "/T:`"$toolsPath`""
 
         $process = Start-Process -FilePath $installerPath -ArgumentList $extractArguments -Wait -PassThru -NoNewWindow
         if ($process.ExitCode -ne 0) { exit $process.ExitCode }
 
     - name: Verify SSIS tools installation
+      env:
+        SSIS_TOOLS_PATH: ${{ steps.paths.outputs.ssis_tools_path }}
       shell: pwsh
       run: |
-        $toolsPath = '${{ steps.paths.outputs.ssis_tools_path }}'
+        $toolsPath = $env:SSIS_TOOLS_PATH
         $timeout = (Get-Date).AddSeconds(60)
 
         do
@@ -106,10 +115,12 @@ runs:
         }
 
     - name: Add SSIS tools path to job PATH
+      env:
+        SSIS_TOOLS_PATH: ${{ steps.paths.outputs.ssis_tools_path }}
       shell: pwsh
       run: |
         [System.IO.File]::AppendAllText(
           $env:GITHUB_PATH,
-          "${{ steps.paths.outputs.ssis_tools_path }}$([Environment]::NewLine)",
+          "$env:SSIS_TOOLS_PATH$([Environment]::NewLine)",
           [System.Text.UTF8Encoding]::new($false)
         )
