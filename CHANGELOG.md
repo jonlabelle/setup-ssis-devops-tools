@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.1](https://github.com/jonlabelle/setup-ssis-devops-tools/compare/v1.9.0...v1.9.1) (2026-09-19)
+
+
+### Bug Fixes
+
+* wait for extraction to finish before verifying SSIS tools ([#9](https://github.com/jonlabelle/setup-ssis-devops-tools/issues/9)) ([966e87f](https://github.com/jonlabelle/setup-ssis-devops-tools/commit/966e87fbcbc235d663963387e5afe96bb2adc876))
+
 # [1.9.0](https://github.com/jonlabelle/setup-ssis-devops-tools/compare/v1.8.0...v1.9.0) (2026-03-29)
 
 
