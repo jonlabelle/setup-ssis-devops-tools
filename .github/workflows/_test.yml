@@ -20,15 +20,18 @@ jobs:
         uses: ./
 
       - name: Assert SSIS tools output
+        env:
+          RUNNER_TEMP_PATH: ${{ runner.temp }}
+          SSIS_TOOLS_PATH: ${{ steps.setup-ssis-tools.outputs.ssis_tools_path }}
         shell: pwsh
         run: |
-          $toolsPath = '${{ steps.setup-ssis-tools.outputs.ssis_tools_path }}'
+          $toolsPath = $env:SSIS_TOOLS_PATH
           if ([string]::IsNullOrWhiteSpace($toolsPath)) {
             Write-Error 'Expected ssis_tools_path action output to be set.'
             exit 1
           }
 
-          $expectedRoot = Join-Path -Path '${{ runner.temp }}' -ChildPath 'setup-ssis-devops-tools'
+          $expectedRoot = Join-Path -Path $env:RUNNER_TEMP_PATH -ChildPath 'setup-ssis-devops-tools'
           if (-not $toolsPath.StartsWith($expectedRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
             Write-Error "Expected SSIS tools to be installed inside '$expectedRoot' but got '$toolsPath'."
             exit 1
