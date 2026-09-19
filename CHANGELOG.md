@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.1](https://github.com/jonlabelle/setup-ssis-devops-tools/compare/v1.10.0...v1.10.1) (2026-09-19)
+
+
+### Bug Fixes
+
+* **action:** prevent PowerShell expression injection ([#11](https://github.com/jonlabelle/setup-ssis-devops-tools/issues/11)) ([60148a0](https://github.com/jonlabelle/setup-ssis-devops-tools/commit/60148a08dba0d4221edf08b5c6bafbad4b1a0dfc))
+
 # [1.10.0](https://github.com/jonlabelle/setup-ssis-devops-tools/compare/v1.9.1...v1.10.0) (2026-09-19)
 
 
