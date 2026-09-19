@@ -50,11 +50,19 @@ runs:
 
     - name: Download SSISDevOpsTools.exe
       shell: pwsh
-      run: >-
-        Invoke-WebRequest
-        -Uri https://aka.ms/SSISDevOpsTools
-        -OutFile '${{ steps.paths.outputs.installer_path }}'
-        -ErrorAction 'Stop'
+      run: |
+        $installerUri = 'https://download.microsoft.com/download/5/1/4/5144b772-d3b0-4e1c-a05b-5376f2ea0fc1/SSISDevOpsTools-1.0.0.0.exe'
+        $expectedHash = '5B721116D982457EF2FB8C584EF8AE24B7266E519FD5F16CAA867FA32EBDD14F'
+        $installerPath = '${{ steps.paths.outputs.installer_path }}'
+
+        Invoke-WebRequest -Uri $installerUri -OutFile $installerPath -ErrorAction 'Stop'
+
+        $actualHash = (Get-FileHash -LiteralPath $installerPath -Algorithm SHA256 -ErrorAction 'Stop').Hash
+        if ($actualHash -cne $expectedHash) {
+          Remove-Item -LiteralPath $installerPath -Force -ErrorAction 'SilentlyContinue'
+          Write-Error "Downloaded SSISDevOpsTools.exe failed SHA-256 validation. Expected '$expectedHash', received '$actualHash'."
+          exit 1
+        }
 
     - name: Extract SSISDevOpsTools.exe
       shell: pwsh
