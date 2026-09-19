@@ -89,14 +89,11 @@ runs:
         $toolsPath = $env:SSIS_TOOLS_PATH
         $timeout = (Get-Date).AddSeconds(60)
 
-        do
-        {
+        do {
           $missingFiles = @(
-            foreach ($expectedFile in 'SSISBuild.exe', 'SSISDeploy.exe')
-            {
+            foreach ($expectedFile in 'SSISBuild.exe', 'SSISDeploy.exe') {
               $expectedPath = Join-Path -Path $toolsPath -ChildPath $expectedFile
-              if (-not (Test-Path -LiteralPath $expectedPath))
-              {
+              if (-not (Test-Path -LiteralPath $expectedPath)) {
                 $expectedFile
               }
             }
@@ -107,8 +104,7 @@ runs:
           Start-Sleep -Milliseconds 500
         } while ((Get-Date) -lt $timeout)
 
-        if ($missingFiles.Count -gt 0)
-        {
+        if ($missingFiles.Count -gt 0) {
           Get-ChildItem -LiteralPath $toolsPath | Format-Table -AutoSize
           Write-Error "Failed to find expected SSIS tools in '$toolsPath': $($missingFiles -join ', ')"
           exit 1
