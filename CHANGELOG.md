@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.10.0](https://github.com/jonlabelle/setup-ssis-devops-tools/compare/v1.9.1...v1.10.0) (2026-09-19)
+
+
+### Features
+
+* validate installer integrity and automate updates ([#10](https://github.com/jonlabelle/setup-ssis-devops-tools/issues/10)) ([569ba18](https://github.com/jonlabelle/setup-ssis-devops-tools/commit/569ba18549b90377d9a901ebc63b59c41275746a))
+
 ## [1.9.1](https://github.com/jonlabelle/setup-ssis-devops-tools/compare/v1.9.0...v1.9.1) (2026-09-19)
 
 
