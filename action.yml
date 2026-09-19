@@ -61,7 +61,7 @@ runs:
       run: |
         $toolsPath = '${{ steps.paths.outputs.ssis_tools_path }}'
         $installerPath = '${{ steps.paths.outputs.installer_path }}'
-        $extractArguments = '/Q', '/C', "/T:$toolsPath"
+        $extractArguments = '/Q', '/C', "/T:`"$toolsPath`""
 
         $process = Start-Process -FilePath $installerPath -ArgumentList $extractArguments -Wait -PassThru -NoNewWindow
         if ($process.ExitCode -ne 0) { exit $process.ExitCode }
