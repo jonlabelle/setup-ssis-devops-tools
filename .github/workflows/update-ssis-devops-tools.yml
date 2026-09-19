@@ -1,0 +1,110 @@
+# Checks for a new SSIS DevOps Tools installer and opens a pull request.
+# Triggers: weekly, or manually from the Actions tab.
+
+name: Update SSIS DevOps Tools
+
+on:
+  schedule:
+    - cron: '17 3 * * 1'
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+env:
+  UPDATE_BRANCH: chore/update-ssis-devops-tools
+
+jobs:
+  update:
+    name: Check for installer updates
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@main
+        with:
+          fetch-depth: 0
+
+      - name: Download and hash latest installer
+        id: installer
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          installer_url="$(curl --fail --location --proto '=https' --tlsv1.2 --output /dev/null --write-out '%{url_effective}' https://aka.ms/SSISDevOpsTools)"
+          case "$installer_url" in
+            https://download.microsoft.com/download/*/*.exe) ;;
+            *)
+              echo "::error title=Unexpected download URL::The SSIS installer resolved to an unexpected URL: $installer_url"
+              exit 1
+              ;;
+          esac
+
+          installer_path="$RUNNER_TEMP/SSISDevOpsTools.exe"
+          curl --fail --location --proto '=https' --tlsv1.2 --output "$installer_path" "$installer_url"
+          installer_hash="$(sha256sum "$installer_path" | cut -d' ' -f1 | tr '[:lower:]' '[:upper:]')"
+
+          {
+            echo "url=$installer_url"
+            echo "hash=$installer_hash"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Update pinned installer metadata
+        env:
+          INSTALLER_URL: ${{ steps.installer.outputs.url }}
+          INSTALLER_HASH: ${{ steps.installer.outputs.hash }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+
+          path = Path('action.yml')
+          content = path.read_text()
+          replacements = {
+              r"(\$installerUri = ')[^']+(')": os.environ['INSTALLER_URL'],
+              r"(\$expectedHash = ')[^']+(')": os.environ['INSTALLER_HASH'],
+          }
+
+          for pattern, value in replacements.items():
+              content, count = re.subn(pattern, rf'\g<1>{value}\g<2>', content, count=1)
+              if count != 1:
+                  raise SystemExit(f'Could not update exactly one action.yml value matching {pattern!r}')
+
+          path.write_text(content)
+          PY
+
+      - name: Create update pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if git diff --quiet -- action.yml; then
+            echo 'No SSIS DevOps Tools update found.'
+            exit 0
+          fi
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch --create "$UPDATE_BRANCH"
+          git add action.yml
+          git commit -m 'chore: update SSIS DevOps Tools installer'
+          git push --force origin "HEAD:$UPDATE_BRANCH"
+
+          if [[ "$(gh pr list --head "$UPDATE_BRANCH" --state open --json number --jq 'length')" == '0' ]]; then
+            gh pr create \
+              --base main \
+              --head "$UPDATE_BRANCH" \
+              --title 'chore: update SSIS DevOps Tools installer' \
+              --body 'Updates the pinned SSIS DevOps Tools installer URL and SHA-256 digest.'
+          fi
