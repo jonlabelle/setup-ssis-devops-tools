@@ -28,6 +28,7 @@ jobs:
         with:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
+          queries: security-and-quality
 
       - name: Auto-build
         uses: github/codeql-action/autobuild@main
